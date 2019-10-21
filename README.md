@@ -2,26 +2,78 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
 
-## Development server
+## Angular package to install
+Run `npm install angularx-qrcode@1.6.4 --save`
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Configuration
+Set the `target`-property in your tsconfig.json from **es2015** to **es5**:
 
-## Code scaffolding
+```
+"target": "es5"
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Basic Usage
 
-## Build
+### Import the module and add it to your imports section in your main AppModule:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
+// File: app.module.ts
+// all your imports
+import { QRCodeModule } from 'angularx-qrcode';
 
-## Running unit tests
+@NgModule({
+declarations: [
+  AppComponent
+],
+imports: [
+  QRCodeModule
+],
+providers: [],
+bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Examples: How to implement angularx-qrcode
 
-## Running end-to-end tests
+### Generate a QR Code from a string (directive only)
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Now that Angular/Ionic knows about the new QR Code module,
+let's invoke it from our template with a directive.
+If we use a simple text-string, we need no additional
+code in our controller.
 
-## Further help
+```
+<qrcode [qrdata]="'Your QR code data string'" [size]="256" [level]="'M'"></qrcode>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Create a QR Code from a variable in your controller
+
+In addition to our `<qrcode>`-directive in `example.html`,
+lets add two lines of code to our controller `example.ts`.
+
+```
+// File: example.ts
+export class QRCodeComponent {
+  public myAngularxQrCode: string = null;
+  constructor () {
+    // assign a value
+    this.myAngularxQrCode = 'Your QR code data string';
+  }
+}
+
+// File: example.html
+<qrcode [qrdata]="myAngularxQrCode" [size]="256" [level]="'M'"></qrcode>
+```
+
+## Parameters
+
+| Attribute        | Type           | Default | Description  |
+| ------------- |-------------| -----|------------|
+| allowEmptyString      | Boolean | false     | Allow empty string |
+| colorlight      | String | '#ffffff'     | Light color |
+| colordark      | String | '#000000'     | Dark Color |
+| level | String | 'M'    | QR Correction level ('L', 'M', 'Q', 'H') |
+| qrdata      | String | '' | String to encode |
+| size      | Number | 256     | Height/Width (any value) |
+| usesvg      | Boolean | false     | SVG Output |
